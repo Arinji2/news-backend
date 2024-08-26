@@ -10,7 +10,7 @@ import (
 	"github.com/Arinji2/news-backend/types"
 )
 
-func setLiveNews(news []types.NewsItem) {
+func setLiveNews(news []types.NewsItem) int {
 
 	token := pocketbase.PocketbaseAdminLogin()
 	client := api.NewApiClient()
@@ -51,9 +51,11 @@ func setLiveNews(news []types.NewsItem) {
 
 	fmt.Println("Live News Set Successfully, Total Items Set: ", len(liveNewsSet))
 
+	return len(liveNewsSet)
+
 }
 
-func setCountryNews(news map[string][]types.NewsItem) {
+func setCountryNews(news map[string][]types.NewsItem) int {
 
 	token := pocketbase.PocketbaseAdminLogin()
 	client := api.NewApiClient()
@@ -71,7 +73,7 @@ func setCountryNews(news map[string][]types.NewsItem) {
 					return
 				}
 
-				_, err := client.SendRequestWithBody("POST", "/api/collections//country/records", map[string]string{
+				_, err := client.SendRequestWithBody("POST", "/api/collections/country/records", map[string]string{
 					"title":       item.Title,
 					"description": item.Description,
 					"publishedAt": item.PublishedAt,
@@ -97,9 +99,11 @@ func setCountryNews(news map[string][]types.NewsItem) {
 
 	fmt.Println("Country News Set Successfully, Total Items Set: ", len(countryNewsSet))
 
+	return len(countryNewsSet)
+
 }
 
-func setCategoryNews(news map[string][]types.NewsItem) {
+func setCategoryNews(news map[string][]types.NewsItem) int {
 
 	token := pocketbase.PocketbaseAdminLogin()
 	client := api.NewApiClient()
@@ -117,7 +121,7 @@ func setCategoryNews(news map[string][]types.NewsItem) {
 					return
 				}
 
-				_, err := client.SendRequestWithBody("POST", "/api/collections//category/records", map[string]string{
+				_, err := client.SendRequestWithBody("POST", "/api/collections/category/records", map[string]string{
 					"title":       item.Title,
 					"description": item.Description,
 					"publishedAt": item.PublishedAt,
@@ -141,5 +145,7 @@ func setCategoryNews(news map[string][]types.NewsItem) {
 	wg.Wait()
 
 	fmt.Println("Category News Set Successfully, Total Items Set: ", len(categoryNewsSet))
+
+	return len(categoryNewsSet)
 
 }

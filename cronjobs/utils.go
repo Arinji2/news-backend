@@ -44,3 +44,42 @@ func checkIfNewsExists(newsItem types.NewsItem, client *api.ApiClient, table str
 	}
 	return totalItems > 0
 }
+
+func getIdsToDelete(client *api.ApiClient, numToRemove string, table string) []string {
+	address := fmt.Sprintf("/api/collections/%s/records", table)
+	results, err := client.SendRequestWithQuery("GET", address, map[string]string{
+		"page":      "1",
+		"perPage":   numToRemove,
+		"sort":      "-created",
+		"skipTotal": "true",
+		"fields":    "id",
+	}, nil)
+	if err != nil {
+		log.Fatalf("Error Getting Extra Results for %s News: %v", table, err)
+	}
+	items, ok := results["items"].([]interface{})
+	if !ok {
+		log.Printf("Error in parsing items for %s News", table)
+		return []string{}
+	}
+
+	var ids []string
+
+	for _, item := range items {
+		itemMap, ok := item.(map[string]interface{})
+		if !ok {
+			log.Printf("Error in parsing item map for %s News", table)
+			continue
+		}
+
+		id, ok := itemMap["id"].(string)
+		if !ok {
+			log.Printf("Error in parsing item id for %s News", table)
+			continue
+		}
+
+		ids = append(ids, id)
+	}
+
+	return ids
+}

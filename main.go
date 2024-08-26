@@ -32,6 +32,8 @@ func main() {
 	}
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("News Backend: Request Received")
+		defer w.Write([]byte("News Backend: Request Received"))
 		key := r.URL.Query()["key"]
 		task := r.URL.Query()["task"]
 		if len(key) != 0 {
@@ -53,8 +55,7 @@ func main() {
 			}
 
 		}
-		fmt.Println("News Backend: Request Received")
-		w.Write([]byte("News Backend: Request Received"))
+
 		render.Status(r, 200)
 	})
 

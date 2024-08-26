@@ -39,14 +39,13 @@ func NewApiClient(baseURL ...string) *ApiClient {
 	}
 }
 
-func (c *ApiClient) doRequest(req *http.Request, headers map[string]string) (map[string]interface{}, error) {
+func (c *ApiClient) doRequest(req *http.Request, headers map[string]string, ignoreParsing bool) (map[string]interface{}, error) {
 
 	req.Header.Set("Content-Type", "application/json")
 	for key, val := range headers {
 		req.Header.Set(key, val)
 	}
 
-	fmt.Println(req.URL.String())
 	resp, err := c.Client.Do(req)
 
 	if err != nil {
@@ -61,6 +60,9 @@ func (c *ApiClient) doRequest(req *http.Request, headers map[string]string) (map
 	var result map[string]interface{}
 
 	if resp.StatusCode == http.StatusNoContent {
+		return result, nil
+	}
+	if ignoreParsing {
 		return result, nil
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
@@ -85,7 +87,7 @@ func (c *ApiClient) SendRequestWithBody(method, path string, body interface{}, h
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	result, err := c.doRequest(req, headers)
+	result, err := c.doRequest(req, headers, false)
 
 	if err != nil {
 		return nil, fmt.Errorf("error from request doer %w", err)
@@ -96,6 +98,10 @@ func (c *ApiClient) SendRequestWithBody(method, path string, body interface{}, h
 }
 
 func (c *ApiClient) SendRequestWithQuery(method, path string, query map[string]string, headers map[string]string) (map[string]interface{}, error) {
+	return c.SendRequestWithQueryAndIgnoreParsing(method, path, query, headers, false)
+}
+
+func (c *ApiClient) SendRequestWithQueryAndIgnoreParsing(method, path string, query map[string]string, headers map[string]string, ignoreParsing bool) (map[string]interface{}, error) {
 
 	queryParams := url.Values{}
 	for key, value := range query {
@@ -112,7 +118,7 @@ func (c *ApiClient) SendRequestWithQuery(method, path string, query map[string]s
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
-	result, err := c.doRequest(req, headers)
+	result, err := c.doRequest(req, headers, ignoreParsing)
 
 	if err != nil {
 		return nil, fmt.Errorf("error from request doer %w", err)
