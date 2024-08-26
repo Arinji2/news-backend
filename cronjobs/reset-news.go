@@ -70,8 +70,8 @@ func resetLiveNews(inserted float64) {
 
 	}
 
-	fmt.Println("Under the limit, purging normally.")
 	numberToRemove := strconv.Itoa(int(math.Min(20.0, inserted)))
+	fmt.Printf("Under the limit, purging normally. Number to remove: %s \n", numberToRemove)
 	ids := getIdsToDelete(client, numberToRemove, "live")
 
 	for _, id := range ids {
@@ -141,9 +141,9 @@ func resetCategoryNews(inserted float64) {
 		return
 
 	}
-
-	fmt.Println("Under the limit, purging normally.")
 	numberToRemove := strconv.Itoa(int(math.Min(20.0, inserted)))
+	fmt.Printf("Under the limit, purging normally. Number to remove: %s \n", numberToRemove)
+
 	ids := getIdsToDelete(client, numberToRemove, "category")
 
 	for _, id := range ids {
@@ -213,8 +213,8 @@ func resetCountryNews(inserted float64) {
 
 	}
 
-	fmt.Println("Under the limit, purging normally.")
 	numberToRemove := strconv.Itoa(int(math.Min(20.0, inserted)))
+	fmt.Printf("Under the limit, purging normally. Number to remove: %s \n", numberToRemove)
 	ids := getIdsToDelete(client, numberToRemove, "country")
 
 	for _, id := range ids {

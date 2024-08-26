@@ -2,7 +2,6 @@ package cronjobs
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/Arinji2/news-backend/api"
@@ -54,7 +53,7 @@ func getLiveNews(token string) []types.NewsItem {
 	}, nil)
 
 	if err != nil {
-		log.Fatalf("Error getting news at live: %v", err)
+		fmt.Println(fmt.Errorf("error getting news at live: %v", err))
 	}
 
 	news := parseAndCleanupNewsItems(result)
@@ -80,7 +79,7 @@ func getCategoryNews(token string, category string) []types.NewsItem {
 	}, nil)
 
 	if err != nil {
-		log.Fatalf("Error getting news at category: %v", err)
+		fmt.Println(fmt.Errorf("error getting news at category: %v", err))
 	}
 
 	news := parseAndCleanupNewsItems(result)
@@ -106,7 +105,7 @@ func getCountryNews(token string, country string) []types.NewsItem {
 	}, nil)
 
 	if err != nil {
-		log.Fatalf("Error getting news at country: %v", err)
+		fmt.Println(fmt.Errorf("error getting news at country: %v", err))
 	}
 
 	news := parseAndCleanupNewsItems(result)

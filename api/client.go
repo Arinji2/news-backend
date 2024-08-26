@@ -54,6 +54,11 @@ func (c *ApiClient) doRequest(req *http.Request, headers map[string]string, igno
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
+		if resp.StatusCode == 422 {
+			fmt.Println("Rate Limit Hit")
+			return nil, fmt.Errorf("rate limit hit")
+
+		}
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
