@@ -9,7 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const size = 15
+const size = 10
 
 var categories = []string{
 	"sports", "business", "entertainment", "science", "technology"}
