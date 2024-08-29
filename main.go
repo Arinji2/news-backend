@@ -70,7 +70,7 @@ func main() {
 	})
 
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("News Backend: Health Check")
+
 		w.Write([]byte("News Backend: Health Check"))
 		render.Status(r, 200)
 	})
